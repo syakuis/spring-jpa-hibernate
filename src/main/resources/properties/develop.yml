@@ -1,6 +1,0 @@
-debug: false
-trace: false
-spring:
-  devtools:
-    livereload:
-      enabled: true

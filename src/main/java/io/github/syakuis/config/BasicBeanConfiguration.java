@@ -25,10 +25,4 @@ public class BasicBeanConfiguration {
 
         return SimpleObjectMapper.of(mapper);
     }
-
-    @Bean("i18n")
-    @ConditionalOnMissingBean
-    public MessageSourceAccessor i18n(MessageSource messageSource) {
-        return new MessageSourceAccessor(messageSource, Locale.getDefault());
-    }
 }

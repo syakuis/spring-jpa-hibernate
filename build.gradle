@@ -6,10 +6,8 @@ buildscript {
         groupId = "io.github.syaku"
         versionName = "1.0.0-SNAPSHOT"
         springBootVersion = "2.4.5"
-        springCloudVersion = "2020.0.3"
         junitVersion = "5.7.1"
         lombokVersion = "1.18.12"
-        restDocsVersion = "2.0.5.RELEASE"
         jacksonVersion = "2.11.4"
         mapstructVersion = "1.4.2.Final"
         querydslVersion = "4.4.0"
@@ -24,11 +22,9 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1"
         classpath "io.franzbecker:gradle-lombok:3.1.0"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
-        classpath "org.asciidoctor:asciidoctor-gradle-jvm:3.3.2"
     }
 }
 
@@ -41,9 +37,6 @@ apply plugin: "application"
 apply plugin: "io.franzbecker.gradle-lombok"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
-apply plugin: "org.asciidoctor.jvm.convert"
-apply plugin: "org.sonarqube"
-apply plugin: "jacoco"
 
 repositories {
     mavenCentral()
@@ -69,12 +62,6 @@ processResources {
     }
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-
 dependencies {
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation "org.mapstruct.extensions.spring:mapstruct-spring-annotations:0.1.0"
@@ -92,17 +79,8 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 
-    implementation "org.apache.commons:commons-lang3:3.7"
-    implementation "commons-io:commons-io:2.6"
-
-    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc:${restDocsVersion}"
-
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-
     implementation "org.springframework.boot:spring-boot-starter-undertow"
     implementation "org.springframework.boot:spring-boot-starter-web"
-    // or implementation "org.springframework.boot:spring-boot-starter"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
@@ -116,48 +94,9 @@ dependencies {
 
     testImplementation "com.h2database:h2:${h2Version}"
     compileOnly "com.h2database:h2:${h2Version}"
-
-    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
 }
-
-sonarqube {
-    properties {
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.organization", "syakuis-github"
-        property "sonar.projectKey", "syakuis-github"
-        property "sonar.projectName", "spring-gradle-template"
-        property "sonar.language", "java"
-        property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.sources", "src/main/java"
-        property "sonar.exclusions", "**/*Test*.*, **/Q*.java"
-        property "sonar.test.inclusions", "**/*Test.java"
-        property "sonar.coverage.exclusions", "**/*Test*.*, **/Q*.java"
-        property "sonar.java.junit.reportPaths", "${buildDir}/test-results"
-        property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/jacoco.exec"
-    }
-}
-
-// <------- RestDocs & Asciidoctor
-def snippetsDir = file("${buildDir}/generated-snippets")
-
-asciidoctor {
-    inputs.dir snippetsDir
-    dependsOn test
-}
-
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
-}
-
-task copyAsciidoc(type: Copy) {
-    dependsOn asciidoctor
-    from file("${buildDir}/asciidoc/html5")
-    into file("src/main/resources/static/docs")
-}
-// ------- RestDocs & Asciidoctor ->
 
 test {
-    outputs.dir snippetsDir
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
@@ -165,21 +104,8 @@ test {
     systemProperty 'spring.profiles.active', 'test'
 }
 
-build {
-    dependsOn copyAsciidoc
-}
-
 application {
     mainClass = "${groupId}.Application"
-}
-
-bootJar {
-    enabled true
-    launchScript()
-    dependsOn asciidoctor
-    from ("${asciidoctor.outputDir}/html5") {
-        into "BOOT-INF/classes/static/docs"
-    }
 }
 
 jar {
