@@ -1,0 +1,21 @@
+server:
+  port: 8080
+#  forward-headers-strategy: native
+#  tomcat:
+#    port-header: X-Forwarded-Port
+#    remote-ip-header: X-Forwarded-For
+#    protocol-header: X-Forwarded-Proto
+#    accesslog:
+#      directory:
+#      enabled: false
+#      file-date-format: .yyyy-MM-dd
+spring:
+  config:
+    import:
+      - classpath:properties/develop.yml
+      - classpath:properties/datasource-jpa.yml
+      - classpath:properties/logback.yml
+  main:
+    banner-mode: console
+  messages:
+    basename: i18n/message
