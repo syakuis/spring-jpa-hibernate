@@ -7,7 +7,7 @@ buildscript {
         versionName = "1.0.0-SNAPSHOT"
         springBootVersion = "2.4.5"
         junitVersion = "5.7.1"
-        lombokVersion = "1.18.12"
+        lombokVersion = "1.18.22"
         jacksonVersion = "2.11.4"
         mapstructVersion = "1.4.2.Final"
         querydslVersion = "4.4.0"
@@ -22,7 +22,6 @@ buildscript {
     }
 
     dependencies {
-        classpath "io.franzbecker:gradle-lombok:3.1.0"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
     }
@@ -34,7 +33,6 @@ wrapper {
 
 apply plugin: "java"
 apply plugin: "application"
-apply plugin: "io.franzbecker.gradle-lombok"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
 
@@ -45,8 +43,8 @@ repositories {
 group groupId
 version versionName
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 compileJava.options.encoding = 'UTF-8'
 
