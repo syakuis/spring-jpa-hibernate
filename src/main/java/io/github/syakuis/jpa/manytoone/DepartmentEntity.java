@@ -1,4 +1,4 @@
-package io.github.syakuis.composite.domain;
+package io.github.syakuis.jpa.manytoone;
 
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -8,23 +8,23 @@ import java.util.Objects;
 
 /**
  * @author Seok Kyun. Choi.
- * @since 2022-06-02
+ * @since 2022-06-07
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
-@Table(name = "school")
+@Table(name = "department")
 @Entity
-public class SchoolEntity {
+public class DepartmentEntity {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Builder
-    public SchoolEntity(String name) {
+    public DepartmentEntity(String name) {
         this.name = name;
     }
 
@@ -32,7 +32,7 @@ public class SchoolEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        SchoolEntity that = (SchoolEntity) o;
+        DepartmentEntity that = (DepartmentEntity) o;
         return id != null && Objects.equals(id, that.id);
     }
 

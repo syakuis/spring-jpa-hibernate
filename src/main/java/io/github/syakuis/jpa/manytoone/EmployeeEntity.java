@@ -1,40 +1,43 @@
-package io.github.syakuis.composite.domain;
+package io.github.syakuis.jpa.manytoone;
 
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * @author Seok Kyun. Choi.
- * @since 2022-06-02
+ * @since 2022-06-07
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
-@Table(name = "student")
+@Table(name = "employee")
 @Entity
-public class StudentEntity {
+public class EmployeeEntity {
     @Id
     @GeneratedValue
     private Long id;
 
+    @Column
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", nullable = false)
+    private DepartmentEntity department;
+
     @Builder
-    public StudentEntity(String name) {
+    public EmployeeEntity(String name, DepartmentEntity department) {
         this.name = name;
+        this.department = department;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        StudentEntity that = (StudentEntity) o;
+        EmployeeEntity that = (EmployeeEntity) o;
         return id != null && Objects.equals(id, that.id);
     }
 

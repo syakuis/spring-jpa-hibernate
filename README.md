@@ -1,1 +1,1 @@
-# Spring Data JPA With Hibernate
+# Spring Data JPA And Hibernate And QueryDSL
